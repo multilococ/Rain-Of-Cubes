@@ -3,36 +3,30 @@ using UnityEngine;
 [RequireComponent(typeof(Renderer))]
 public class Cube : MonoBehaviour
 {
-    private Renderer _renderer;
-    private Color _defautlColor;
+    [SerializeField] private Color _defautlColor;
 
-    private bool _isColorChanged;
+    private Renderer _renderer;
+
+    private bool _isTouchedPlatfome;
+
+    public bool IsTouchedPlatfome => _isTouchedPlatfome;
+
 
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
+        InitCube();
     }
 
-    private void Start()
+    public void InitCube()
     {
-        _isColorChanged = false;
-         _renderer.material.color = Color.green;
+        _isTouchedPlatfome = false;
+        _renderer.material.color = _defautlColor;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void CollisionWithPlatform()
     {
-        if (collision.collider.GetComponent<Platform>() is Platform) 
-        {
-            if (_isColorChanged == false)
-            {
-                SetRandomColor();
-                _isColorChanged = true;
-            }
-        }
-    }
-
-    private void SetRandomColor() 
-    {    
+        _isTouchedPlatfome = true;
         _renderer.material.color = new Color(Random.value, Random.value, Random.value);
     }
 }
