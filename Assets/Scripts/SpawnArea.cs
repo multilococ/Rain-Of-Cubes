@@ -10,7 +10,6 @@ public class SpawnArea : MonoBehaviour
         float yPosition = transform.position.y;
         float xPosition = transform.position.x;
         float zPosition = transform.position.z;
-
         float maxPositionX = xPosition + _xRange;
         float minPositionX = xPosition - _xRange;
         float maxPositionZ = zPosition + _zRange;
