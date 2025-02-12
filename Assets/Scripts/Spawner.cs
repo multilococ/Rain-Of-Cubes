@@ -18,11 +18,11 @@ public class Spawner : MonoBehaviour
 
     private void Awake()
     {
-        _pool = InitPool();
+        _pool = CreatePool();
         StartCoroutine(SpawnCubes(_spawnCount, _repiatingDelay));
     }
 
-    private ObjectPool<Cube> InitPool() 
+    private ObjectPool<Cube> CreatePool()
     {
         return new ObjectPool<Cube>(
             createFunc: () => Instantiate(_prefab),
@@ -34,17 +34,16 @@ public class Spawner : MonoBehaviour
             maxSize: _poolMaxSize);
     }
 
-    public void ReleaseCube(Cube cube)
+    private void ReleaseCube(Cube cube)
     {
-        cube.OnDeath -= ReleaseCube;
+        cube.OnDied -= ReleaseCube;
         _pool.Release(cube);
     }
 
     private void GetObjectFromPool(Cube cube)
     {
         cube.transform.position = _spawnArea.GetRandomPosition();
-        cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        cube.transform.rotation = Quaternion.Euler(Vector3.zero);
+        cube.transform.rotation = Quaternion.identity;
         cube.gameObject.SetActive(true);
     }
 
@@ -52,7 +51,7 @@ public class Spawner : MonoBehaviour
     {
         Cube cube = _pool.Get();
         cube.Init();
-        cube.OnDeath += ReleaseCube;
+        cube.OnDied += ReleaseCube;
     }
 
     private IEnumerator SpawnCubes(int spawnCount, float delay)
