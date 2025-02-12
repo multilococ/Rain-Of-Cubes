@@ -1,32 +1,61 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Renderer))]
 public class Cube : MonoBehaviour
 {
+    public UnityAction<Cube> OnDeath;
+
     [SerializeField] private Color _defautlColor;
 
     private Renderer _renderer;
 
-    private bool _isTouchedPlatfome;
+    private float _minLifeTime = 2f;
+    private float _maxLifeTime = 5f;
 
-    public bool IsTouchedPlatfome => _isTouchedPlatfome;
-
+    private bool _isTouchedPlatform;
 
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
-        InitCube();
+        Init();
     }
 
-    public void InitCube()
+    public void Init()
     {
-        _isTouchedPlatfome = false;
+        _isTouchedPlatform = false;
         _renderer.material.color = _defautlColor;
     }
 
-    public void CollisionWithPlatform()
+    private void CollideWithPlatform()
     {
-        _isTouchedPlatfome = true;
+        _isTouchedPlatform = true;
         _renderer.material.color = new Color(Random.value, Random.value, Random.value);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<Platform>() == null)
+        {
+            return;
+        }
+
+        if (_isTouchedPlatform == false)
+        {
+            CollideWithPlatform();
+            StartCoroutine(DeathWithDelay(_minLifeTime, _maxLifeTime));
+        }
+    }
+
+    private IEnumerator DeathWithDelay(float minLifeTime, float maxLifeTime)
+    {
+        float lifeTime = Random.Range(minLifeTime, maxLifeTime);
+
+        WaitForSeconds delay = new WaitForSeconds(lifeTime);
+
+        yield return delay;
+
+        OnDeath?.Invoke(this);
     }
 }

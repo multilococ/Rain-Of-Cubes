@@ -1,62 +1,69 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _prefab;
+    [SerializeField] private Cube _prefab;
 
-    [SerializeField] private float _yPosition;
+    [SerializeField] private SpawnArea _spawnArea;
 
     [SerializeField] private float _repiatingDelay = 1;
 
-    private ObjectPool<GameObject> _pool;
+    private ObjectPool<Cube> _pool;
 
+    private int _spawnCount = 100;
     private int _poolCapacity = 10;
     private int _poolMaxSize = 10;
 
     private void Awake()
     {
-        _pool = new ObjectPool<GameObject>(
+        _pool = InitPool();
+        StartCoroutine(SpawnCubes(_spawnCount, _repiatingDelay));
+    }
+
+    private ObjectPool<Cube> InitPool() 
+    {
+        return new ObjectPool<Cube>(
             createFunc: () => Instantiate(_prefab),
-            actionOnRelease: (obj) => obj.SetActive(false),
-            actionOnGet: (obj) => ActionOnGet(obj),
-            actionOnDestroy: (obj) => Destroy(obj),
+            actionOnRelease: (cube) => cube.gameObject.SetActive(false),
+            actionOnGet: (cube) => GetObjectFromPool(cube),
+            actionOnDestroy: (cube) => Destroy(cube),
             collectionCheck: true,
             defaultCapacity: _poolCapacity,
             maxSize: _poolMaxSize);
     }
 
-    private void Start()
+    public void ReleaseCube(Cube cube)
     {
-        InvokeRepeating(nameof(GetCube), 0.0f, _repiatingDelay);
+        cube.OnDeath -= ReleaseCube;
+        _pool.Release(cube);
     }
 
-    public void ReleaseCube(GameObject cube)
+    private void GetObjectFromPool(Cube cube)
     {
-        _pool.Release(cube);
+        cube.transform.position = _spawnArea.GetRandomPosition();
+        cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        cube.transform.rotation = Quaternion.Euler(Vector3.zero);
+        cube.gameObject.SetActive(true);
     }
 
     private void GetCube()
     {
-        GameObject cube = _pool.Get();
-        cube.GetComponent<Cube>().InitCube();
+        Cube cube = _pool.Get();
+        cube.Init();
+        cube.OnDeath += ReleaseCube;
     }
 
-    private void ActionOnGet(GameObject cube)
+    private IEnumerator SpawnCubes(int spawnCount, float delay)
     {
-        cube.transform.position = GetRandomPosition();
-        cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        cube.transform.rotation = Quaternion.Euler(Vector3.zero);
-        cube.SetActive(true);
-    }
+        WaitForSeconds waitForSeconds = new WaitForSeconds(delay);
 
-    private Vector3 GetRandomPosition()
-    {
-        float MaxPositionX = 4.5f;
-        float MinPositionX = -4.5f;
-        float MaxPositionZ = 4.5f;
-        float MinPositionZ = -4.5f;
+        for (int i = 0; i < spawnCount; i++)
+        {
+            GetCube();
 
-        return new Vector3(Random.Range(MinPositionX, MaxPositionX), _yPosition, Random.Range(MinPositionZ, MaxPositionZ));
+            yield return waitForSeconds;
+        }
     }
 }
