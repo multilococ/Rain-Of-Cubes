@@ -5,16 +5,16 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public abstract class SpawnPrefab : MonoBehaviour
 {
-    protected Renderer _renderer;
-    protected Rigidbody _rigidbody;
+    protected Renderer Renderer;
+    protected Rigidbody Rigidbody;
 
-    protected float _minLifeTime = 2f;
-    protected float _maxLifeTime = 5f;
+    protected float MinLifeTime = 2f;
+    protected float MaxLifeTime = 5f;
 
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody>();
-        _renderer = GetComponent<Renderer>();
+        Rigidbody = GetComponent<Rigidbody>();
+        Renderer = GetComponent<Renderer>();
     }
 
     public abstract void Init(Vector3 spawnPosition);

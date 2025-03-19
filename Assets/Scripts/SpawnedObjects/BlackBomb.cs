@@ -15,16 +15,16 @@ public class BlackBomb : SpawnPrefab
 
     public override void Init(Vector3 spawnPosition)
     {
-        _renderer.material.color = Color.black;
+        Renderer.material.color = Color.black;
         transform.position = spawnPosition;
         transform.rotation = Quaternion.identity;
-        _rigidbody.velocity = Vector3.zero;
-        StartCoroutine(DeathWithDelay(_minLifeTime, _maxLifeTime));
+        Rigidbody.velocity = Vector3.zero;
+        StartCoroutine(DeathWithDelay(MinLifeTime, MaxLifeTime));
     }
 
     protected override IEnumerator DeathWithDelay(float minLifeTime, float maxLifeTime)
     {
-        Color bombColor = _renderer.material.color;
+        Color bombColor = Renderer.material.color;
 
         float lifeTime = UnityEngine.Random.Range(minLifeTime, maxLifeTime);
         float dealapsedTime = 0.0f;
@@ -37,7 +37,7 @@ public class BlackBomb : SpawnPrefab
             float normalazedTime = dealapsedTime / lifeTime;
             float interminadateValue = Mathf.Lerp(priviosValue,0,normalazedTime);
 
-            _renderer.material.color = new Color(bombColor.r,bombColor.g,bombColor.b,interminadateValue);
+            Renderer.material.color = new Color(bombColor.r,bombColor.g,bombColor.b,interminadateValue);
             
             yield return null;
         }

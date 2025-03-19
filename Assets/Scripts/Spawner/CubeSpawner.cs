@@ -14,13 +14,13 @@ public class CubeSpawner : Spawner<Cube>
 
     private void Awake()
     {
-        _pool = CreatePool();
+        Pool = CreatePool();
         StartCoroutine(SpawnCubes(_maxSpawnCount,_repiatingDelay));
     }
 
     protected override void GetPrefab(Vector3 spawnPosition)
     {
-        Cube cube = _pool.Get();
+        Cube cube = Pool.Get();
         cube.Init(spawnPosition);
         cube.OnDied += ReleasePrefab;
         IncreaseActiveObjectsCounter();
@@ -30,7 +30,7 @@ public class CubeSpawner : Spawner<Cube>
     {
         prefab.OnDied -= ReleasePrefab;
         CubeRealesed?.Invoke(prefab.transform.position);
-        _pool.Release(prefab);
+        Pool.Release(prefab);
         ReduceActiveObjectsCounter();
     }
 

@@ -6,7 +6,7 @@ public class BombSpawner : Spawner<BlackBomb>
 
     private void Awake()
     {
-        _pool = CreatePool();
+        Pool = CreatePool();
     }
 
     private void OnEnable()
@@ -21,7 +21,7 @@ public class BombSpawner : Spawner<BlackBomb>
 
     protected override void GetPrefab(Vector3 spawnPosition)
     {
-        BlackBomb blackBomb = _pool.Get();
+        BlackBomb blackBomb = Pool.Get();
         blackBomb.Init(spawnPosition);
         blackBomb.OnDied += ReleasePrefab;
         IncreaseActiveObjectsCounter();
@@ -30,7 +30,7 @@ public class BombSpawner : Spawner<BlackBomb>
     protected override void ReleasePrefab(BlackBomb prefab)
     {
         prefab.OnDied -= ReleasePrefab;
-        _pool.Release(prefab);
+        Pool.Release(prefab);
         ReduceActiveObjectsCounter();
     }
 }

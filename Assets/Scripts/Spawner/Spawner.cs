@@ -11,9 +11,9 @@ public abstract class Spawner <T> : MonoBehaviour where T : SpawnPrefab
     private int _spawnedObjectForAllTimeCount = 0;
     private int _createdObjectsCount = 0;
 
-    protected int _activeObjectsCount = 0;
+    protected int ActiveObjectsCount = 0;
 
-    protected ObjectPool<T> _pool;
+    protected ObjectPool<T> Pool;
 
     public event Action<int> SpawndeObjectForAllTimeChanged;
     public event Action<int> CreatedObjectsCountChanged;
@@ -58,14 +58,14 @@ public abstract class Spawner <T> : MonoBehaviour where T : SpawnPrefab
 
     protected void IncreaseActiveObjectsCounter() 
     {
-        _activeObjectsCount++; 
-        ActiveObjectsCountChanged?.Invoke(_activeObjectsCount);
+        ActiveObjectsCount++; 
+        ActiveObjectsCountChanged?.Invoke(ActiveObjectsCount);
     }  
     
     protected void ReduceActiveObjectsCounter() 
     {
-        _activeObjectsCount--; 
-        ActiveObjectsCountChanged?.Invoke(_activeObjectsCount);
+        ActiveObjectsCount--; 
+        ActiveObjectsCountChanged?.Invoke(ActiveObjectsCount);
     }
 
     protected abstract void ReleasePrefab(T prefab);

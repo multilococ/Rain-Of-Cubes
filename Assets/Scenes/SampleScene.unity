@@ -371,7 +371,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 1
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1377,6 +1377,7 @@ GameObject:
   - component: {fileID: 607769722}
   - component: {fileID: 607769725}
   - component: {fileID: 607769724}
+  - component: {fileID: 607769726}
   m_Layer: 5
   m_Name: BombSpawnerPanel
   m_TagString: Untagged
@@ -1448,6 +1449,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607769721}
   m_CullTransparentMesh: 1
+--- !u!114 &607769726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607769721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc787a3c452c85e41a85c23cfa233f6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawner: {fileID: 583515423}
+  _spawnedObjectsForAllTimeCounterText: {fileID: 2097727529}
+  _createdObjectsCounterText: {fileID: 778277784}
+  _activeObjectsCounterText: {fileID: 1425329401}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

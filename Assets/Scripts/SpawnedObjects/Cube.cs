@@ -15,14 +15,14 @@ public class Cube : SpawnPrefab
         transform.position = spawnPosition;
         transform.rotation = Quaternion.identity;
         _isTouchedPlatform = false;
-        _renderer.material.color = _defautlColor;
-        _rigidbody.velocity = Vector3.zero; 
+        Renderer.material.color = _defautlColor;
+        Rigidbody.velocity = Vector3.zero; 
     }
 
     private void CollideWithPlatform()
     {
         _isTouchedPlatform = true;
-        _renderer.material.color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+        Renderer.material.color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -35,7 +35,7 @@ public class Cube : SpawnPrefab
         if (_isTouchedPlatform == false)
         {
             CollideWithPlatform();
-            StartCoroutine(DeathWithDelay(_minLifeTime, _maxLifeTime));
+            StartCoroutine(DeathWithDelay(MinLifeTime, MaxLifeTime));
         }
     }
 
