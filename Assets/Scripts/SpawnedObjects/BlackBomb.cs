@@ -39,8 +39,8 @@ public class BlackBomb : SpawnPrefab
 
             _renderer.material.color = new Color(bombColor.r,bombColor.g,bombColor.b,interminadateValue);
             
-        }
             yield return null;
+        }
         
         _exploder.Explode(transform.position);
         OnDied?.Invoke(this);
