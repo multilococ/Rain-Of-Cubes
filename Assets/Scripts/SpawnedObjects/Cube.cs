@@ -2,32 +2,18 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Renderer))]
-[RequireComponent(typeof(Rigidbody))]
-public class Cube : MonoBehaviour
+public class Cube : SpawnPrefab
 {
     [SerializeField] private Color _defautlColor;
-
-    private Renderer _renderer;
-
-    private Rigidbody _rigidbody;
-
-    private float _minLifeTime = 2f;
-    private float _maxLifeTime = 5f;
 
     private bool _isTouchedPlatform;
 
     public event Action<Cube> OnDied;
 
-    private void Awake()
+    public override void Init(Vector3 spawnPosition)
     {
-        _rigidbody = GetComponent<Rigidbody>();
-        _renderer = GetComponent<Renderer>();
-        Init();
-    }
-
-    public void Init()
-    {
+        transform.position = spawnPosition;
+        transform.rotation = Quaternion.identity;
         _isTouchedPlatform = false;
         _renderer.material.color = _defautlColor;
         _rigidbody.velocity = Vector3.zero; 
@@ -53,7 +39,7 @@ public class Cube : MonoBehaviour
         }
     }
 
-    private IEnumerator DeathWithDelay(float minLifeTime, float maxLifeTime)
+    protected override IEnumerator DeathWithDelay(float minLifeTime, float maxLifeTime)
     {
         float lifeTime = UnityEngine.Random.Range(minLifeTime, maxLifeTime);
 
